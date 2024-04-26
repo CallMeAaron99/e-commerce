@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
+import { useUserStore } from '@/stores/user';
 import { useToastStore } from '@/stores/toast';
 
 export const useWishlistStore = defineStore({
@@ -15,6 +16,9 @@ export const useWishlistStore = defineStore({
                 .then(response => { this.wishlist = response.data })
         },
         addToWishlist(product) {
+            const userStore = useUserStore()
+            if (!userStore.user.isAuthenticated) return this.$router.push({ name: "login" })
+            
             const toastStore = useToastStore()
 
             // Product exists in wishlist
