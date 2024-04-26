@@ -18,7 +18,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 
 class ProductFilter(rest_filters.FilterSet):
-    name = rest_filters.CharFilter(field_name="name", lookup_expr='contains')
+    name = rest_filters.CharFilter(field_name="name", lookup_expr='icontains')
     category = ListFilter(field_name="category", lookup_expr='in')
     brand = ListFilter(field_name="brand", lookup_expr='in')
     min_price = rest_filters.NumberFilter(field_name="price", lookup_expr='gte')
@@ -62,6 +62,7 @@ class CategoryList(generics.ListAPIView):
 
     def get_serializer_context(self):
         product_filter = ProductFilter(self.request.GET, queryset=Product.objects.all())
+        # Pass filter to serializer
         return {'product_filter': product_filter}
 
 
@@ -78,4 +79,5 @@ class BrandList(generics.ListAPIView):
 
     def get_serializer_context(self):
         product_filter = ProductFilter(self.request.GET, queryset=Product.objects.all())
+        # Pass filter to serializer
         return {'product_filter': product_filter}
